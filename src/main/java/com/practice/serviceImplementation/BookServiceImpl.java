@@ -3,10 +3,7 @@ package com.practice.serviceImplementation;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.practice.DTO.BookDTO;
@@ -20,8 +17,9 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private BookRepo bookRepo;
 
-	@Autowired
-	private Book book;
+	public BookServiceImpl(BookRepo bookRepo) {
+		this.bookRepo = bookRepo;
+	}
 
 	@Override
 	public Book addBook(Book book) {
@@ -38,8 +36,15 @@ public class BookServiceImpl implements BookService {
 		return bookRepo.findAll();
 	}
 
-	public void saveBookWithImage(BookDTO bookDto) throws IOException {
+	@Override
+	public Optional<Book> getBookById(int id) {
+		return bookRepo.findById(id);
+	}
 
+	public String saveBookWithImage(BookDTO bookDto) throws IOException {
+
+		Book book = new Book();
+		
 		int id = bookDto.getId();
 		String name = bookDto.getName();
 		String authorName = bookDto.getAuthorName();
@@ -47,25 +52,19 @@ public class BookServiceImpl implements BookService {
 		String language = bookDto.getLanguage();
 		int price = bookDto.getPrice();
 		MultipartFile img = bookDto.getBookImg();
-		
-		if (img != null) {
+
+
 			book.setId(id);
 			book.setName(name);
 			book.setAuthorName(authorName);
 			book.setType(type);
 			book.setLanguage(language);
 			book.setPrice(price);
-			book.setBookImg(img.getBytes());
-		} 
-
+			if (img != null ) book.setBookImg(img.getBytes());
+			
 		bookRepo.save(book);
-	}
-
-	@Override
-	public Optional<Book> getBookById(int id) {
-		return bookRepo.findById(id);
 		
-		
+		return "book save successfully!!";
 	}
 
 }

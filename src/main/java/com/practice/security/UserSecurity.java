@@ -64,5 +64,4 @@ public class UserSecurity implements UserDetails {
 		// TODO Auto-generated method stub
 		return true;
 	}
-
 }

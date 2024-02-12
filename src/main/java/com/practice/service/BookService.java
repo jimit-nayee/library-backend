@@ -14,7 +14,7 @@ public interface BookService {
 
 	public Book addBook(Book book);
 	public List<Book> getBookData();
-	public void saveBookWithImage(BookDTO bookDto) throws IOException;
+	public String saveBookWithImage(BookDTO bookDto) throws IOException;
 	public void deleteBook(int id);
 	Optional<Book> getBookById(int id);
 
